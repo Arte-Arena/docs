@@ -6,5 +6,5 @@ COPY . .
 RUN make html
 FROM nginx:alpine
 COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY build/ /usr/share/nginx/
+COPY build/html/ /usr/share/nginx/html/
 EXPOSE 80
