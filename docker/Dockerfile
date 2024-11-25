@@ -5,7 +5,7 @@ WORKDIR /app
 COPY requirements.txt /app
 RUN pip install -r requirements.txt
 COPY . /app/
-RUN sphinx-build /app /app/_build/html -b dirhtml
+RUN make html
 
 FROM nginx:latest
 
