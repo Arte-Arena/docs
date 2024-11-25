@@ -3,6 +3,7 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
+RUN sphinx-build -b html source build
 RUN make html
 FROM nginx:alpine
 COPY docker/nginx.conf /etc/nginx/nginx.conf
