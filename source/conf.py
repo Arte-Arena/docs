@@ -15,6 +15,7 @@ language = 'pt'
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ['theme_overrides.css']
 html_theme_options = {
     'prev_next_buttons_location': 'both',
     'navigation_depth': 4,
