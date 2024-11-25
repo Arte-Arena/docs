@@ -27,12 +27,14 @@ arte-final, bem como pela impressão, confecção e demais etapas produtivas.
 
    This project is under active development.
 
+
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Conteúdos:
 
-.. py:function:: enumerate(sequence[, start=0])
-
-   Return an iterator that yields tuples of an index and an item of the
-   *sequence*. (And so on.)
-
+   introducao/introducao
+   guia_de_uso
+   faq
+   
+...
+Para mais informações, consulte a sessão :ref:`guia_de_uso`.
