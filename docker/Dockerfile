@@ -4,7 +4,7 @@ COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 COPY . .
 RUN make html
-COPY build/html/ /usr/share/nginx/html/
 FROM nginx:alpine
+COPY --from=build /app/build/html/ /usr/share/nginx/html/
 COPY docker/nginx.conf /etc/nginx/
 EXPOSE 80
