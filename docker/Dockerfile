@@ -9,6 +9,6 @@ RUN sphinx-build /app /app/_build/html -b dirhtml
 
 FROM nginx:latest
 
-COPY ./nginx.conf /etc/nginx/nginx.conf
+COPY ./docker/nginx.conf /etc/nginx/nginx.conf
 COPY --from=builder /app/_build/html /usr/share/nginx/html
 EXPOSE 80
