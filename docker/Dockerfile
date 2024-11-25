@@ -1,13 +1,10 @@
-FROM python:3.11-slim AS builder
-
+FROM python:3.9-slim-buster
 WORKDIR /app
-
-COPY . .
+COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
+COPY . .
 RUN make html
-
-FROM nginx:latest
-
-COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY --from=builder /app/_build/html /usr/share/nginx/html
+COPY build/ /usr/share/nginx/html
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/
 EXPOSE 80
