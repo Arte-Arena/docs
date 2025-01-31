@@ -1,5 +1,5 @@
 Instalação
-===========
+==========
 
 O Space possui 6 ambientes isolados.
 

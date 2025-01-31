@@ -1,5 +1,5 @@
 Configuração
-=============
+============
 
 
 Existem vários níveis de configuração para o Space.

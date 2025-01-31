@@ -3,12 +3,6 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Documentação do Space
-=========================
-
-Adicione o seu conteúdo usando a sintaxe ``reStructuredText``. Veja a documentação `reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-para detalhes.
-
 Bem vindo à Documentação do Space!
 ===================================
 
@@ -17,15 +11,20 @@ Usando principalmente as linguagens PHP e Typescript, Space é um software
 de gestão empresarial  que ajuda as empresas Arte Arena a gerenciar seus 
 produtos, pedidos, vendas, clientes, fornecedores, produção, contas etc.
 
+.. image:: _static/images/dark-logo.svg
+
 Space oferece uma API intuitiva e um conjunto de funcionalidades prontas para 
 uso por todos os setores da empresa, oferecendo uma especial interface para 
 acompanhamento dos pedidos, desde a venda até a entrega, passando pela 
 arte-final, bem como pela impressão, confecção e demais etapas produtivas.
 
+A interface visual do Space faz uso do Next.js, parte do template Modernize,
+e oferece o acesso para os usuários logados conforme seus perfis de acesso.
 
 .. note::
 
-   This project is under active development.
+   A arquitetura básica do backend é uma API feita em Laravel (PHP), enquanto o 
+   frontend resume-se a uma aplicação React a partir do Next.js (Typescript).
 
 
 .. toctree::

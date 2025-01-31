@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="pt" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Integração Contínua &mdash; Documentação Space Arena </title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=103ffe9a"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=beaedd51"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="../genindex.html" />
+    <link rel="search" title="Pesquisar" href="../search.html" />
+    <link rel="next" title="Guia de Uso" href="../guia_de_uso.html" />
+    <link rel="prev" title="Configuração" href="configuracao.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Space Arena
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Pesquisar docs" aria-label="Pesquisar docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Menu de navegação">
+              <p class="caption" role="heading"><span class="caption-text">Conteúdos:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="introducao.html">Introdução</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="instalacao.html">Instalação</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configuracao.html">Configuração</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Integração Contínua</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#padroes-adotados">Padrões Adotados:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integracao-continua-do-backend">Integração Contínua do Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#integracao-continua-do-frontend">Integração Contínua do Frontend</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../guia_de_uso.html">Guia de Uso</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">FAQ - Perguntas Frequentes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Menu de navegação móvel" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Space Arena</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Navegação da página">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="introducao.html">Introdução</a></li>
+      <li class="breadcrumb-item active">Integração Contínua</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/introducao/integracao-continua.rst.txt" rel="nofollow"> Ver código-fonte da página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="integracao-continua">
+<h1>Integração Contínua<a class="headerlink" href="#integracao-continua" title="Link to this heading"></a></h1>
+<p>A integração contínua (CI) do Space visa automatizar o processo de construção, teste e deploy das aplicações frontend (React) e backend (API Laravel), garantindo a qualidade do código e agilidade na entrega de novas funcionalidades.  Utilizamos o GitHub Actions para orquestrar os pipelines de CI/CD e o Kubernetes para o deploy das aplicações. As imagens Docker são construídas e armazenadas no Docker Hub.  Devido à arquitetura da aplicação, com frontend e backend isolados, mantemos imagens Docker separadas para cada um, além de ambientes de homologação e produção isolados, com seus respectivos bancos de dados.</p>
+<p>Fluxo de CI/CD:</p>
+<p>O fluxo de CI/CD é dividido em pipelines separados para backend e frontend, e para os ambientes de homologação e produção.  A seguir, detalhamos o processo para o backend, que serve de exemplo para o frontend, com as devidas adaptações:</p>
+<blockquote>
+<div><p>Desenvolvimento: Desenvolvedores trabalham em suas branches e realizam commits.</p>
+<p>Homologação: Pushes para a branch homolog disparam o pipeline de CI/CD de homologação do backend.</p>
+<dl class="simple">
+<dt>Pipeline de Homologação (Backend):</dt><dd><p>O GitHub Actions faz o checkout do código.
+Realiza o login no Docker Hub utilizando as credenciais armazenadas nos secrets do GitHub.
+Constrói a imagem Docker do backend utilizando o Dockerfile específico. A imagem é tageada com a versão (ex: artearenahub/space-backend-homolog:0.0.${{github.run_number}}) e também com a tag latest.
+Envia a imagem para o Docker Hub.
+O Kubernetes busca a imagem mais recente do Docker Hub e atualiza o deployment do backend no ambiente de homologação. O arquivo deploy.yml exemplifica a configuração do deployment, incluindo a referência à imagem e os secrets para as variáveis de ambiente.</p>
+</dd>
+</dl>
+<p>Produção: Pull Requests (PRs) para a branch main são utilizados para o deploy em produção. Ao serem fechados, disparam o pipeline de produção.</p>
+</div></blockquote>
+</section>
+<section id="padroes-adotados">
+<h1>Padrões Adotados:<a class="headerlink" href="#padroes-adotados" title="Link to this heading"></a></h1>
+<blockquote>
+<div><p>Branching Model: Utilizamos um modelo de branching baseado em Gitflow, com branches homolog e main para os respectivos ambientes.
+Dockerização: Todas as aplicações são dockerizadas, garantindo a portabilidade e consistência entre os ambientes.
+Gerenciamento de Imagens: O Docker Hub é utilizado como repositório centralizado para as imagens Docker.
+Orquestração de Deployments: O Kubernetes gerencia os deployments das aplicações, permitindo o escalonamento e o rolling updates.
+Secrets: As credenciais e informações sensíveis são armazenadas como secrets no GitHub e no Kubernetes, evitando a exposição em código.
+Automatização: Todo o processo de build, teste e deploy é automatizado, reduzindo o tempo de entrega e minimizando erros humanos.
+Ambientes Isolados: Os ambientes de homologação e produção são completamente isolados, incluindo seus respectivos bancos de dados, garantindo que as alterações em homologação não afetem a produção.</p>
+</div></blockquote>
+<p>Essa abordagem de integração contínua permite que a equipe do Space entregue novas funcionalidades de forma rápida e segura, com alta qualidade e confiabilidade.  A separação entre frontend e backend, e entre ambientes, garante flexibilidade e escalabilidade para o crescimento da aplicação.</p>
+</section>
+<section id="integracao-continua-do-backend">
+<h1>Integração Contínua do Backend<a class="headerlink" href="#integracao-continua-do-backend" title="Link to this heading"></a></h1>
+<blockquote>
+<div><dl class="simple">
+<dt>Pipeline de Produção (Backend):</dt><dd><p>O GitHub Actions faz o checkout do código.
+Realiza o login no Docker Hub.
+Constrói a imagem Docker do backend, tageando-a de forma similar ao ambiente de homologação (ex: artearenahub/space-backend:0.0.${{github.run_number}} e artearenahub/space-backend:latest).
+Envia a imagem para o Docker Hub.
+O Kubernetes atualiza o deployment do backend no ambiente de produção, similar ao processo de homologação, porém utilizando os arquivos de configuração específicos para produção.</p>
+</dd>
+</dl>
+</div></blockquote>
+</section>
+<section id="integracao-continua-do-frontend">
+<h1>Integração Contínua do Frontend<a class="headerlink" href="#integracao-continua-do-frontend" title="Link to this heading"></a></h1>
+<p>Integração Contínua do Frontend</p>
+<p>O processo de integração contínua do frontend do Space segue uma estrutura semelhante à do backend, mas com algumas diferenças importantes devido à natureza da aplicação React.  Assim como o backend, utilizamos GitHub Actions, Docker e Kubernetes para automatizar o processo.</p>
+<p>Diferenças entre CI/CD do Frontend e Backend:</p>
+<blockquote>
+<div><p>Construção da Aplicação:</p>
+<p>Backend (Laravel): O backend é construído através da execução de comandos como composer install (para dependências PHP) e outros comandos específicos da linguagem e framework. A construção resulta em um conjunto de arquivos que são empacotados na imagem Docker.
+Frontend (React): O frontend React passa por um processo de build utilizando ferramentas como npm build ou yarn build. Esse processo otimiza o código, minifica arquivos JavaScript e CSS, e gera os arquivos estáticos que serão servidos por um servidor web dentro do container Docker.</p>
+<p>Servidor Web:</p>
+<p>Backend: O backend Laravel geralmente é servido por um servidor web como Nginx ou Apache dentro do container Docker.
+Frontend: O frontend React, após o build, consiste em arquivos estáticos. Dentro do container Docker, utilizamos um servidor web como Nginx ou serve para servir esses arquivos estáticos. Isso é uma diferença crucial, pois o frontend não precisa de um framework PHP rodando em produção, apenas um servidor web para entregar os arquivos estáticos.</p>
+<p>Variáveis de Ambiente:</p>
+<p>Backend: As variáveis de ambiente do backend são geralmente gerenciadas através de arquivos .env e secrets do Kubernetes. Essas variáveis são acessadas pela aplicação Laravel durante a execução.
+Frontend: No frontend React, as variáveis de ambiente são frequentemente definidas durante o processo de build e incorporadas aos arquivos estáticos. Utilizamos o mesmo padrão de arquivos .env, com a diferença que, no deploy, usamos o envsubst para substituir as variáveis no arquivo de configuração do Nginx. O exemplo dos arquivos de workflow demonstra a criação do arquivo .env com as variáveis corretas para cada ambiente.</p>
+<p>Deploy no Kubernetes:</p>
+<p>Backend: O deploy do backend no Kubernetes envolve a criação de deployments e services que expõem a API Laravel.
+Frontend: O deploy do frontend também envolve deployments e services, mas o service geralmente expõe a porta do servidor web que serve os arquivos estáticos do React. O arquivo deploy.yml do frontend demonstra a configuração do deployment, incluindo a referência à imagem e a porta 3000, que é a porta padrão do servidor web que serve os arquivos estáticos do React.</p>
+<p>Processo de Deploy:</p>
+<p>Backend: O deploy do backend geralmente envolve a atualização da imagem no Docker Hub e a atualização do deployment no Kubernetes, que automaticamente puxa a nova imagem.
+Frontend: O processo é similar, mas a imagem do frontend contém os arquivos estáticos já construídos.</p>
+</div></blockquote>
+<p>Detalhes do Workflow do Frontend:</p>
+<blockquote>
+<div><p>Homologação: O workflow de homologação do frontend é acionado por pushes para a branch homolog. Ele define as variáveis de ambiente específicas para homologação (ex: NEXT_PUBLIC_API=https://api-homolog.spacearena.net), constrói a imagem Docker com essas variáveis incorporadas, e a envia para o Docker Hub. O Kubernetes então atualiza o deployment com a nova imagem.
+Produção: O workflow de produção é acionado quando um Pull Request para a branch main é fechado (e mergeado). Similarmente ao workflow de homologação, ele define as variáveis de ambiente de produção (ex: NEXT_PUBLIC_API=https://api.spacearena.net), constrói a imagem e a envia para o Docker Hub. O Kubernetes atualiza o deployment de produção.</p>
+</div></blockquote>
+<p>Padrões Adotados (Frontend):</p>
+<p>Além dos padrões já mencionados para o backend (Dockerização, Docker Hub, Kubernetes, Secrets, Automatização, Ambientes Isolados), o frontend também adota:</p>
+<blockquote>
+<div><p>Build Otimizado: O processo de build do React garante que os arquivos estáticos sejam otimizados para produção.
+Servidor Web Estático: Um servidor web leve (Nginx ou serve) é utilizado dentro do container Docker para servir os arquivos estáticos do React.</p>
+</div></blockquote>
+<p>Em resumo, o processo de CI/CD do frontend é adaptado para as características específicas de uma aplicação React, com foco na construção otimizada dos arquivos estáticos, definição de variáveis de ambiente durante o build e utilização de um servidor web para servir esses arquivos.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Rodapé">
+        <a href="configuracao.html" class="btn btn-neutral float-left" title="Configuração" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+        <a href="../guia_de_uso.html" class="btn btn-neutral float-right" title="Guia de Uso" accesskey="n" rel="next">Seguinte <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Leandro Damasio.</p>
+  </div>
+
+  Compilado com <a href="https://www.sphinx-doc.org/">Sphinx</a> usando um
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    fornecido por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
