@@ -32,8 +32,10 @@ e oferece o acesso para os usuários logados conforme seus perfis de acesso.
    :caption: Conteúdos:
 
    introducao/introducao
+   arquitetura/arquitetura
    guia_de_uso
    faq
+   releases
    
 ...
 Para mais informações, consulte a sessão :ref:`guia_de_uso`.
