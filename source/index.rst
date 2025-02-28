@@ -33,6 +33,7 @@ e oferece o acesso para os usuários logados conforme seus perfis de acesso.
 
    introducao/introducao
    arquitetura/arquitetura
+   metodologia/metodologia
    guia_de_uso
    faq
    releases
